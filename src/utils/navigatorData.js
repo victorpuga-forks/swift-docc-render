@@ -218,9 +218,15 @@ export function flattenNavigationIndex(languages) {
   return Object.entries(languages).reduce((acc, [language, modules]) => {
     if (!modules.length) return acc;
     const rootModule = extractRootModule(modules);
-    acc[language] = flattenNestedData(
-      rootModule.children || [], null, 0, rootModule.beta,
-    );
+
+    // Check if we have multiple top-level modules (siblings) or a single root with children
+    const hasMultipleTopLevelModules = modules.length > 1;
+    let topLevelItems = hasMultipleTopLevelModules ? modules : (rootModule.children || []);
+
+    // Filter out well-known paths (e.g., homepage)
+    topLevelItems = topLevelItems.filter(item => !item.path.includes('well-known'));
+
+    acc[language] = flattenNestedData(topLevelItems, null, 0, rootModule.beta);
     return acc;
   }, {});
 }

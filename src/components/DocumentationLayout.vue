@@ -54,7 +54,10 @@
               <Navigator
                 key="base-navigator"
                 v-show="sidenavVisibleOnMobile || breakpoint === BreakpointName.large"
-                v-bind="{ ...navigatorProps, technologyProps }"
+                v-bind="{
+                  ...navigatorProps,
+                  technologyProps: $route.path === '/' ? null : technologyProps,
+                }"
                 :parent-topic-identifiers="parentTopicIdentifiers"
                 :references="references"
                 :scrollLockID="scrollLockID"
