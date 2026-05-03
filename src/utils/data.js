@@ -57,6 +57,9 @@ export async function fetchData(path, params = {}, options = {}) {
 
 function createDataPath(path) {
   const dataPath = path.replace(/\/$/, '');
+  if (!dataPath) {
+    return `${normalizePath('/data/homepage')}.json`;
+  }
   return `${normalizePath(['/data', dataPath])}.json`;
 }
 

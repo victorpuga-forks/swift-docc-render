@@ -10,6 +10,7 @@
 
 import {
   documentationTopicName,
+  homeRouteName,
   notFoundRouteName,
   serverErrorRouteName,
 } from 'docc-render/constants/router';
@@ -30,6 +31,13 @@ export const fallbackRoutes = [
 ];
 
 export const pagesRoutes = [
+  {
+    path: '/',
+    name: homeRouteName,
+    component: () => import(
+      /* webpackChunkName: "home" */ 'theme/views/DocumentationTopic.vue'
+    ),
+  },
   {
     path: '/tutorials/:id',
     name: 'tutorials-overview',
