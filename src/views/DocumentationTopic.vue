@@ -253,17 +253,21 @@ export default {
       isRootTechnologyLink ? parentTopicIdentifiers.slice(1) : parentTopicIdentifiers
     ),
     /**
-     * Returns the root url reference object, if is a `technologies` link.
-     * Otherwise returns a manual route query object.
+     * Returns the root url reference object. Links to the technology page if one exists,
+     * otherwise links to the homepage.
      * @return {Object}
      */
     rootLink: ({
       isRootTechnologyLink, rootHierarchyReference, $route,
-    }) => (isRootTechnologyLink
-      ? {
-        path: rootHierarchyReference.url,
-        query: $route.query,
-      } : null),
+    }) => {
+      if (isRootTechnologyLink) {
+        return {
+          path: rootHierarchyReference.url,
+          query: $route.query,
+        };
+      }
+      return { path: '/', query: $route.query };
+    },
   },
   methods: {
     handleCodeColorsChange(codeColors) {
