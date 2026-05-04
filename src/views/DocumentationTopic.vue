@@ -266,7 +266,8 @@ export default {
           query: $route.query,
         };
       }
-      return { path: '/', query: $route.query };
+      const homePathWithLocale = $route.params.locale ? `/${$route.params.locale}/` : '/';
+      return { path: homePathWithLocale, query: $route.query };
     },
   },
   methods: {

@@ -16,6 +16,7 @@ import {
   fetchIndexPathsData,
 } from 'docc-render/utils/data';
 import emitWarningForSchemaVersionMismatch from 'docc-render/utils/schema-version-check';
+import { homeRouteName } from 'docc-render/constants/router';
 import FetchError from 'docc-render/errors/FetchError';
 import RedirectError from 'docc-render/errors/RedirectError';
 import { defaultLocale } from 'theme/lang/index';
@@ -272,6 +273,84 @@ describe('fetchDataForRouteEnter', () => {
       window.location.href,
     ).href, {});
     await expect(data).toEqual(await goodFetchResponse.json());
+
+    window.fetch.mockRestore();
+  });
+
+  it('fetches homepage data for the root home route', async () => {
+    window.fetch = jest.fn().mockImplementation(() => goodFetchResponse);
+
+    const data = await fetchDataForRouteEnter({
+      name: homeRouteName,
+      path: '/',
+      params: {},
+      query: {},
+    }, from, next);
+
+    expect(window.fetch).toHaveBeenLastCalledWith(new URL(
+      '/data/well-known/homepage.json',
+      window.location.href,
+    ).href, {});
+    expect(data).toEqual(await goodFetchResponse.json());
+
+    window.fetch.mockRestore();
+  });
+
+  it('fetches homepage data for a locale-prefixed home route', async () => {
+    window.fetch = jest.fn().mockImplementation(() => goodFetchResponse);
+
+    const data = await fetchDataForRouteEnter({
+      name: `${homeRouteName}-locale`,
+      path: '/ar/',
+      params: { locale: 'ar' },
+      query: {},
+    }, from, next);
+
+    expect(window.fetch).toHaveBeenLastCalledWith(new URL(
+      '/data/well-known/homepage.json',
+      window.location.href,
+    ).href, {});
+    expect(data).toEqual(await goodFetchResponse.json());
+
+    window.fetch.mockRestore();
+  });
+
+  it('fetches homepage data for all locale-prefixed home route variants', async () => {
+    const locales = ['ar', 'en-US', 'zh-CN', 'ja-JP', 'ko-KR'];
+    window.fetch = jest.fn().mockImplementation(() => goodFetchResponse);
+
+    for (const locale of locales) {
+      // eslint-disable-next-line no-await-in-loop
+      await fetchDataForRouteEnter({
+        name: `${homeRouteName}-locale`,
+        path: `/${locale}/`,
+        params: { locale },
+        query: {},
+      }, from, next);
+
+      expect(window.fetch).toHaveBeenLastCalledWith(new URL(
+        '/data/well-known/homepage.json',
+        window.location.href,
+      ).href, {});
+    }
+
+    window.fetch.mockRestore();
+  });
+
+  it('does not redirect non-home locale-prefixed routes to homepage data', async () => {
+    window.fetch = jest.fn().mockImplementation(() => goodFetchResponse);
+
+    await fetchDataForRouteEnter({
+      name: 'documentation-topic-locale',
+      path: '/ar/documentation/myframework',
+      params: { locale: 'ar' },
+      query: {},
+    }, from, next);
+
+    expect(window.fetch).toHaveBeenLastCalledWith(new URL(
+      '/data/ar/documentation/myframework.json',
+      window.location.href,
+    ).href, {});
 
     window.fetch.mockRestore();
   });

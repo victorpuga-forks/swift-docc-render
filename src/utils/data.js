@@ -13,6 +13,7 @@ import {
   queryStringForParams, areEquivalentLocations, getAbsoluteUrl,
 } from 'docc-render/utils/url-helper';
 import emitWarningForSchemaVersionMismatch from 'docc-render/utils/schema-version-check';
+import { homeRouteName } from 'docc-render/constants/router';
 import RedirectError from 'docc-render/errors/RedirectError';
 import FetchError from 'docc-render/errors/FetchError';
 
@@ -77,7 +78,8 @@ function transformDataPathToRoutePath(dataURL) {
 }
 
 export async function fetchDataForRouteEnter(to, from, next) {
-  const path = createDataPath(to.path);
+  const isHomeRoute = to.name?.startsWith(homeRouteName);
+  const path = createDataPath(isHomeRoute ? '/' : to.path);
 
   let data;
   try {
