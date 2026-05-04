@@ -224,7 +224,7 @@ export function flattenNavigationIndex(languages) {
     let topLevelItems = hasMultipleTopLevelModules ? modules : (rootModule.children || []);
 
     // Filter out well-known paths (e.g., homepage)
-    topLevelItems = topLevelItems.filter(item => !item.path.includes('well-known'));
+    topLevelItems = topLevelItems.filter(item => !item.path?.includes('well-known'));
 
     acc[language] = flattenNestedData(topLevelItems, null, 0, rootModule.beta);
     return acc;

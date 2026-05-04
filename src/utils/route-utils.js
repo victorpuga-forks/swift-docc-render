@@ -8,9 +8,11 @@
  * See https://swift.org/CONTRIBUTORS.txt for Swift project authors
 */
 import { pathJoin } from 'docc-render/utils/assets';
+import locales from 'docc-render/lang/locales.json';
 
+const localePattern = locales.map(l => l.slug).join('|');
 const localEnvs = [
-  { pathPrefix: '/:locale?', nameSuffix: '-locale' },
+  { pathPrefix: `/:locale(${localePattern})?`, nameSuffix: '-locale' },
 ];
 
 /**
