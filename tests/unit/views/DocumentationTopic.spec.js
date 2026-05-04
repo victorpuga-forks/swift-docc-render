@@ -261,7 +261,7 @@ describe('DocumentationTopic', () => {
 
     await wrapper.setData({ topicData });
 
-    const title = wrapper.findComponent('h2.nav-title');
+    const title = wrapper.findComponent(RouterLinkStub);
     expect(title.exists()).toBe(true);
     expect(title.text()).toBe('documentation.title');
   });

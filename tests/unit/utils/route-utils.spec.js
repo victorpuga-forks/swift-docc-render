@@ -28,15 +28,15 @@ describe('route-utils', () => {
     const result = addPrefixedRoutes(routes);
     // assert extra route data is kept, `name` and `path` are changed
     expect(result).toEqual([
-      { meta: { a: 'a' }, name: 'a-locale', path: '/:locale?/path/to/a' },
-      { meta: { b: 'b' }, name: 'b-locale', path: '/:locale?/path/to/b' },
+      { meta: { a: 'a' }, name: 'a-locale', path: '/:locale(ar|en-US|zh-CN|ja-JP|ko-KR)?/path/to/a' },
+      { meta: { b: 'b' }, name: 'b-locale', path: '/:locale(ar|en-US|zh-CN|ja-JP|ko-KR)?/path/to/b' },
     ]);
   });
 
   it('allows you to ignore routes for transformation', () => {
     const result = addPrefixedRoutes(routes, ['b']);
     expect(result).toEqual([
-      { meta: { a: 'a' }, name: 'a-locale', path: '/:locale?/path/to/a' },
+      { meta: { a: 'a' }, name: 'a-locale', path: '/:locale(ar|en-US|zh-CN|ja-JP|ko-KR)?/path/to/a' },
     ]);
   });
 
@@ -57,7 +57,7 @@ describe('route-utils', () => {
     ];
 
     const result = addPrefixedRoutes(rootRoutes);
-    expect(result[0].path).toBe('/:locale?/');
+    expect(result[0].path).toBe('/:locale(ar|en-US|zh-CN|ja-JP|ko-KR)?/');
   });
 
   it('handles routes with trailing slashes', () => {
@@ -66,7 +66,7 @@ describe('route-utils', () => {
     ];
 
     const result = addPrefixedRoutes(trailingSlashRoutes);
-    expect(result[0].path).toBe('/:locale?/path/with/trailing/');
+    expect(result[0].path).toBe('/:locale(ar|en-US|zh-CN|ja-JP|ko-KR)?/path/with/trailing/');
   });
 
   it('handles routes without trailing slashes', () => {
@@ -75,7 +75,7 @@ describe('route-utils', () => {
     ];
 
     const result = addPrefixedRoutes(trailingSlashRoutes);
-    expect(result[0].path).toBe('/:locale?/path/with/trailing');
+    expect(result[0].path).toBe('/:locale(ar|en-US|zh-CN|ja-JP|ko-KR)?/path/with/trailing');
   });
 
   it('handles pathPrefix with trailing slash', () => {
