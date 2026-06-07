@@ -10,7 +10,7 @@
 
 <template>
   <GenericError :message="$t('error.not-found')">
-    <div class="back-link-container">
+    <div v-if="documentationLink" class="back-link-container">
       <Reference :url="documentationLink">
         {{ $t('error.back-to-documentation') }}
       </Reference>
@@ -32,7 +32,7 @@ export default {
   components: { GenericError, Reference },
   data() {
     return {
-      documentationPath: '/documentation',
+      documentationPath: null,
     };
   },
   computed: {
@@ -55,7 +55,7 @@ export default {
         this.documentationPath = firstModule.path;
       }
     } catch (e) {
-      // Default to '/documentation' if fetching index fails
+      // Link won't render if fetch fails
     }
   },
   beforeRouteEnter(to, from, next) {
